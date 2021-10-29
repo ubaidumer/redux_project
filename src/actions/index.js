@@ -1,9 +1,18 @@
+import axios from "axios";
+import CONFIG from "../config/config";
 export const SUBMIT = "SUBMIT";
 export const REMOVE = 'REMOVE';
 export const VIEW = 'VIEW';
- export function view(){
-    const action={
-        type:VIEW,
-    } 
-    return action;
+
+ export const viewdata=()=>async dispatch=>{
+    try{
+        const res = await axios.get(CONFIG.GET_URL)
+        dispatch( {
+            type: VIEW,
+            payload: res.data
+        })
+    }
+    catch(e){
+     console.log(e)
+    }
  }
