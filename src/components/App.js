@@ -3,34 +3,44 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Post from './Post';
 import ViewPost from './ViewPost';
-
+import Header from './Header';
 
 const useStyles = makeStyles({
     container:{
         paddingRight: "15px",
   paddingLeft: "15px",
-  marginRight: "auto",
-  marginLeft: "auto",
-  width: "100%",
-  display:'flex'
+  margin: "auto",
+  display:'flex',
     },
-    typo:{
-    }
+    gridpost:{
+        padding:'50px',
+    },
+    gridview:{
+        minWidth:'700px',
+        padding:'50px',
+        overflow:'auto'
+    },
+
 })
 
 
 function App(props) {
     const classes=useStyles();
     return (
-        <div >       
+        <div  >       
+            <Header/>
             <Container>
         <div  className={classes.container}>
-            <Grid md={6} lg={6}>
+            <div className={classes.gridpost}>
+            <Grid >
              <Post/>
             </Grid>
-            <Grid md={6} lg={6}>
+            </div>
+            <div className={classes.gridview}>
+            <Grid>
              <ViewPost/>
             </Grid>
+            </div>
         </div>
         </Container>
         </div>

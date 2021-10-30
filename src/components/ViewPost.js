@@ -1,4 +1,4 @@
-import { Grid, Table, TableCell, TableRow ,Typography} from '@material-ui/core';
+import { Grid, Table, TableCell, TableRow ,Typography,Paper} from '@material-ui/core';
 import React,{Component} from 'react';
 import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
@@ -11,9 +11,11 @@ import { viewdata } from '../actions';
         const {view}=this.props.view;
         console.log('ee',view);
     return (
-        <Grid>
-            <Typography  variant='h2'>Post Data View</Typography>
-            <Table>
+        <Paper style={{width:"100%" ,overflow:'auto' , backgroundColor:'#3f51b5' , color:'black'}}>
+            <div style={{justifyContent:'center', display:'flex',backgroundColor:'#757de8'}}>
+            <Typography style={{color:'azure'}} variant='h2'>Post Data View</Typography>
+            </div>
+            <Table >
                 <TableRow >
                     <TableCell>User ID</TableCell>
                     <TableCell>Post ID</TableCell>
@@ -29,7 +31,7 @@ import { viewdata } from '../actions';
                                {item.userId}
                             </TableCell>
                             <TableCell>
-                                {item.id}
+                                {item._id}
                             </TableCell>
                             <TableCell>
                                 {item.title}
@@ -42,7 +44,7 @@ import { viewdata } from '../actions';
                     }):<div>No Data</div>
                 }
             </Table>
-        </Grid>
+        </Paper>
     );}
 }
 
