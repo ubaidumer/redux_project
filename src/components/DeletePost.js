@@ -1,12 +1,10 @@
 import { Button, FormControl, FormLabel, Grid, Paper, TextareaAutosize, TextField, Typography, Box } from '@material-ui/core';
 import React,{useState} from 'react';
-import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import { bindActionCreators } from 'redux';
-import { viewdata } from '../actions';
 import { connect } from 'react-redux';
 import { styled } from '@mui/material/styles';
-import CONFIG from '../config/config';
+import { removedata } from './../actions/index';
 const useStyles = makeStyles({
     paper:{
     marginTop: '100px',
@@ -57,6 +55,7 @@ const ValidationTextField = styled(TextField)({
       borderColor: 'azure',
       padding: '4px !important',
     },
+
     '& label.Mui-focused': {
         color: 'azure',
       },
@@ -66,74 +65,33 @@ const ValidationTextField = styled(TextField)({
 
   });
 
-async function addpost(userId,title,body,props){
-    console.log("qeqweqwe",CONFIG.POST_URL)
-   const res= await axios.post(CONFIG.POST_URL,{
-
-    userId:userId,
-    title:title,
-    body:body
-
-    })
-    console.log(res);
-    props.viewdata();
-}
-
-
-function Post(props) {
-    const [userId, setUserId] = useState('');
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+function DeletePost(props) {
+    const [postId, setPostId] = useState('');
     const classes=useStyles();
     return (
         <Paper item className={classes.paper}>
             <div className={classes.title}>
-            <Typography variant='h2'>Add Post Form</Typography>
+            <Typography variant='h2'>Delete Post Form</Typography>
             </div>
             <div className={classes.form}>
             <div className={classes.format}>
-                <div>
             <ValidationTextField  
             InputProps={{
                 className:classes.fontColor
             }}
-            value={userId}
-                onChange={(e)=>setUserId(e.target.value)}
+            value={postId}
+                onChange={(e)=>setPostId(e.target.value)}
              className={classes.typo}         required
-             variant="outlined" label="Enter User Id" />
+             variant="outlined" label="Enter Post Id" />
              </div>
-             <div>
-            <ValidationTextField 
-            InputProps={{
-                className:classes.fontColor
-            }} value={title}
-                onChange={(e)=>setTitle(e.target.value)}
-                required
-             className={classes.typo}id="outlined-basic" label="Enter Post title" variant="outlined"/>
-             </div>
-             </div>
-             <div className={classes.textarea}>
-            <ValidationTextField
-            InputProps={{
-                className:classes.fontColor
-            }}
-            required
-            value={body}
-            onChange={(e)=>setBody(e.target.value)}
-             className={classes.typo}
-          id="filled-multiline-static"
-          label="Post Body"
-          multiline
-          rows={4}
-          defaultValue="Post Body"
-          variant="filled"
-        />
+             <div>   
         </div>
         </div>
         <div className={classes.button}>
-        <Button style={{backgroundColor:'#3f51b5' , color:'azure'}} onClick={()=>{
-            addpost(userId,title,body,props);
-        }}  className={classes.button}variant="contained">Add Post</Button>
+        <Button style={{backgroundColor:'#3f51b5' , color:'azure'}} 
+        
+        className={classes.button}variant="contained" 
+        onClick={()=>props.removedata(postId)}>Delete Post</Button>
         </div>
         </Paper>
         
@@ -141,6 +99,6 @@ function Post(props) {
 }
 
  function mapDispatchToProps(dispatch){
-    return bindActionCreators({viewdata},dispatch)
+    return bindActionCreators({removedata},dispatch)
 }
-export default connect(null,mapDispatchToProps)(Post);
+export default connect(null,mapDispatchToProps)(DeletePost);

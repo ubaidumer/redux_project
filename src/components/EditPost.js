@@ -66,10 +66,10 @@ const ValidationTextField = styled(TextField)({
 
   });
 
-async function addpost(userId,title,body,props){
-    console.log("qeqweqwe",CONFIG.POST_URL)
-   const res= await axios.post(CONFIG.POST_URL,{
-
+async function editpost(post,userId,title,body,props){
+    console.log("qeqweqwe",CONFIG.UPDATE_URL)
+   const res= await axios.post(CONFIG.UPDATE_URL,{
+    _id:post,
     userId:userId,
     title:title,
     body:body
@@ -80,17 +80,29 @@ async function addpost(userId,title,body,props){
 }
 
 
-function Post(props) {
+function EditPost(props) {
     const [userId, setUserId] = useState('');
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [post, setPostId] = useState('');
     const classes=useStyles();
     return (
+        
         <Paper item className={classes.paper}>
             <div className={classes.title}>
-            <Typography variant='h2'>Add Post Form</Typography>
+            <Typography variant='h2'>Edit Post Form</Typography>
             </div>
             <div className={classes.form}>
+            <div style={{justifyContent:'center' , display:'flex' ,padding:'10px'}}>
+            <ValidationTextField  
+            InputProps={{
+                className:classes.fontColor
+            }}
+            value={post}
+                onChange={(e)=>setPostId(e.target.value)}
+             className={classes.typo}         required
+             variant="outlined" label="Enter Post Id" />
+             </div>
             <div className={classes.format}>
                 <div>
             <ValidationTextField  
@@ -132,8 +144,8 @@ function Post(props) {
         </div>
         <div className={classes.button}>
         <Button style={{backgroundColor:'#3f51b5' , color:'azure'}} onClick={()=>{
-            addpost(userId,title,body,props);
-        }}  className={classes.button}variant="contained">Add Post</Button>
+            editpost(post,userId,title,body,props);
+        }}  className={classes.button}variant="contained">Edit Post</Button>
         </div>
         </Paper>
         
@@ -143,4 +155,4 @@ function Post(props) {
  function mapDispatchToProps(dispatch){
     return bindActionCreators({viewdata},dispatch)
 }
-export default connect(null,mapDispatchToProps)(Post);
+export default connect(null,mapDispatchToProps)(EditPost);

@@ -16,3 +16,19 @@ export const VIEW = 'VIEW';
      console.log(e)
     }
  }
+
+ export const removedata=(id)=>async dispatch=>{
+    try{
+        console.log("igotit",id)
+        const del = await axios.post(CONFIG.DELETE_URL,{id});
+        console.log(del);
+        const res = await axios.get(CONFIG.GET_URL);
+        dispatch({
+            type: REMOVE,
+            payload: res.data
+        })
+    }
+    catch(e){
+     console.log(e)
+    }
+ }

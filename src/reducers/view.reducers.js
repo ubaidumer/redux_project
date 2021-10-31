@@ -1,4 +1,4 @@
-import { SUBMIT, VIEW } from './../actions/index';
+import { REMOVE, SUBMIT, VIEW } from './../actions/index';
 function view(state=[],action){
     switch(action.type){
         default:
@@ -7,8 +7,13 @@ function view(state=[],action){
             return {
                 ...state,
                 view:action.payload,
-    
             }
+        case REMOVE:
+            return {
+                ...state,
+                view:action.payload,
+            }
+            
     }
 }
 

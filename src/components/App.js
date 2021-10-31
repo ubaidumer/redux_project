@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Post from './Post';
 import ViewPost from './ViewPost';
 import Header from './Header';
+import DeletePost from './DeletePost';
+import EditPost from './EditPost';
 
 const useStyles = makeStyles({
     container:{
@@ -34,6 +36,8 @@ function App(props) {
             <div className={classes.gridpost}>
             <Grid >
              <Post/>
+             <EditPost/>
+             <DeletePost/>
             </Grid>
             </div>
             <div className={classes.gridview}>
