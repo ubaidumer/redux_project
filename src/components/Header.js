@@ -21,7 +21,15 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 200
   },
   offset: theme.mixins.toolbar
-}));
+  ,
+  menu:{
+    display:'none'
+  }
+}
+
+
+
+));
 
 export default function Header() {
   const classes = useStyles();
@@ -44,6 +52,7 @@ export default function Header() {
             aria-label="menu"
           >
             <MenuIcon />
+
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             Post Application

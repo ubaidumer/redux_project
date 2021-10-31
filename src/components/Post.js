@@ -7,6 +7,7 @@ import { viewdata } from '../actions';
 import { connect } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CONFIG from '../config/config';
+import validator from 'validator';
 const useStyles = makeStyles({
     paper:{
     marginTop: '100px',
@@ -84,6 +85,7 @@ function Post(props) {
     const [userId, setUserId] = useState('');
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [error, setError] = useState([]);
     const classes=useStyles();
     return (
         <Paper item className={classes.paper}>
