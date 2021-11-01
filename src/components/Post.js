@@ -67,21 +67,43 @@ const ValidationTextField = styled(TextField)({
 
   });
 
-async function addpost(userId,title,body,props){
-    console.log("qeqweqwe",CONFIG.POST_URL)
-   const res= await axios.post(CONFIG.POST_URL,{
-
-    userId:userId,
-    title:title,
-    body:body
-
-    })
-    console.log(res);
-    props.viewdata();
-}
-
 
 function Post(props) {
+    async function addpost(userId,title,body,props){
+        let ERROR={};
+    
+        if((!validator.isNumeric(userId))||validator.isAlpha(userId)){
+            ERROR['userId']="Only Numeric input is allowed!"
+        }
+        if(!validator.isLength(title,{
+            min:5,
+            max:20
+        })){
+            ERROR['title']="title must be 5 characters to 20 characters!"  
+        }
+        if(!validator.isLength(body,{
+            min:15,
+            max:100
+        })){
+            ERROR['body']="body must be 15 characters to 100 characters!"  
+        }
+        console.log("cjec",ERROR)
+        if(ERROR!=null && ERROR!=undefined && ERROR!={}){
+            setError(ERROR);
+            console.log("present",error)
+        }else{
+       const res= await axios.post(CONFIG.POST_URL,{
+    
+        userId:userId,
+        title:title,
+        body:body
+    
+        })
+        console.log(res);
+    }
+        props.viewdata();
+    }
+    
     const [userId, setUserId] = useState('');
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');

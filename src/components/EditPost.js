@@ -7,6 +7,7 @@ import { viewdata } from '../actions';
 import { connect } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CONFIG from '../config/config';
+import validator from 'validator';
 const useStyles = makeStyles({
     paper:{
     marginTop: '100px',
@@ -66,7 +67,31 @@ const ValidationTextField = styled(TextField)({
 
   });
 
+function EditPost(props) {
+    
 async function editpost(post,userId,title,body,props){
+    let ERROR={};
+    
+    if((!validator.isNumeric(userId))||validator.isAlpha(userId)){
+        ERROR['userId']="Only Numeric input is allowed!"
+    }
+    if(!validator.isLength(title,{
+        min:5,
+        max:20
+    })){
+        ERROR['title']="title must be 5 characters to 20 characters!"  
+    }
+    if(!validator.isLength(body,{
+        min:15,
+        max:100
+    })){
+        ERROR['body']="body must be 15 characters to 100 characters!"  
+    }
+    console.log("cjec",ERROR)
+    if(ERROR!=null && ERROR!=undefined && ERROR!={}){
+        setError(ERROR);
+        console.log("present",error)
+    }else{
     console.log("qeqweqwe",CONFIG.UPDATE_URL)
    const res= await axios.post(CONFIG.UPDATE_URL,{
     _id:post,
@@ -76,15 +101,14 @@ async function editpost(post,userId,title,body,props){
 
     })
     console.log(res);
+}
     props.viewdata();
 }
-
-
-function EditPost(props) {
     const [userId, setUserId] = useState('');
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [post, setPostId] = useState('');
+    const [error, setError] = useState([]);
     const classes=useStyles();
     return (
         
