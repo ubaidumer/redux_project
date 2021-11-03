@@ -8,6 +8,10 @@ import { connect } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CONFIG from '../config/config';
 import validator from 'validator';
+import * as Yup from 'yup'
+import { Alert } from '@mui/material';
+import { Formik } from 'formik';
+import { CircularProgress } from '@material-ui/core';
 const useStyles = makeStyles({
     paper:{
     marginTop: '100px',
@@ -67,11 +71,74 @@ const ValidationTextField = styled(TextField)({
 
   });
 
+const Schema = {
+    userId: {
+        presence: {
+            allowEmpty: false,
+            message: "User Id Must Not Be Empty"
+        },
+        numericality: {
+            required: true,
+            message: 'User Id Must Be Numerical'
+        },
+    },
+    title: {
+        presence: {
+            allowEmpty: false,
+            message: "Title Must Not Be Empty"
+        },
+        length: {
+          minimum: 6,
+          maximum: 20,
+          message: 'Title Must Be Atleast 6 characters and Atmost 20 characters'
+        },
+
+    },
+    body:{
+        presence: {
+            allowEmpty: false,
+            message: "Body Must Not Be Empty"
+        },
+        length: {
+          minimum: 15,
+          maximum: 100,
+          message: 'Body Must Be Atleast 15 characters and Atmost 100 characters'
+        },
+
+    }
+}
 
 function Post(props) {
-    async function addpost(userId,title,body,props){
+    const classes=useStyles();
+    return (
+        <Paper item className={classes.paper}>
+            <div className={classes.title}>
+            <Typography variant='h2'>Add Post Form</Typography>
+            </div>
+            <div className={classes.form}>
+            <div className={classes.format}>
+                <div>
+                <Formik
+      initialValues={{
+          userId:'123123123',
+          body:"lorem ipsm love u",
+          title:'qeqweqwe',
+        submit: null
+      }}
+      validationSchema={Yup.object().shape({
+        userId: Yup.string()
+          .max(255)
+          .required('UserId is required'),
+        body: Yup.string()
+          .max(255)
+          .required('Body is required'),
+        title: Yup.string()
+          .max(255)
+          .required('Title is required')
+      })}
+      onSubmit={async (values,  { setErrors, setStatus }) => {
         let ERROR={};
-    
+        const {userId,title,body} = values;
         if((!validator.isNumeric(userId))||validator.isAlpha(userId)){
             ERROR['userId']="Only Numeric input is allowed!"
         }
@@ -88,9 +155,9 @@ function Post(props) {
             ERROR['body']="body must be 15 characters to 100 characters!"  
         }
         console.log("cjec",ERROR)
-        if(ERROR!=null && ERROR!=undefined && ERROR!={}){
-            setError(ERROR);
-            console.log("present",error)
+        if(Object.keys(ERROR).length !== 0){
+            setStatus({ success: false });
+            setErrors({  submit:Object.values(ERROR) });
         }else{
        const res= await axios.post(CONFIG.POST_URL,{
     
@@ -102,63 +169,92 @@ function Post(props) {
         console.log(res);
     }
         props.viewdata();
-    }
-    
-    const [userId, setUserId] = useState('');
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
-    const [error, setError] = useState([]);
-    const classes=useStyles();
-    return (
-        <Paper item className={classes.paper}>
-            <div className={classes.title}>
-            <Typography variant='h2'>Add Post Form</Typography>
-            </div>
-            <div className={classes.form}>
-            <div className={classes.format}>
+        }
+      }
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values
+      }) => (
+        <form
+          noValidate
+          onSubmit={handleSubmit}
+        >
+          <TextField
+            error={Boolean(touched.userId && errors.userId)}
+            autoFocus
+            helperText={touched.userId && errors.userId}
+            label="UserId"
+            margin="normal"
+            name="userId"
+            placeholder="userId"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            type="userId"
+            value={values.userId}
+            variant="outlined"
+          />
+          <TextField
+            error={Boolean(touched.title && errors.title)}
+            helperText={touched.title && errors.title}
+            label="Title"
+            margin="normal"
+            name="title"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            type="title"
+            value={values.title}
+            variant="outlined"
+          />
+            <TextField
+            error={Boolean(touched.body && errors.body)}
+            helperText={touched.body && errors.body}
+            label="Body"
+            margin="normal"
+            name="body"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            type="body"
+            value={values.body}
+            variant="outlined"
+          />
+          {errors.submit && (
+            <Box mt={2}>
+              <Alert severity="error">
                 <div>
-            <ValidationTextField  
-            InputProps={{
-                className:classes.fontColor
-            }}
-            value={userId}
-                onChange={(e)=>setUserId(e.target.value)}
-             className={classes.typo}         required
-             variant="outlined" label="Enter User Id" />
+                  <strong>{errors.submit}</strong>
+                </div>
+              </Alert>
+            </Box>
+          )}
+          <Box mt={2}>
+            <Button
+              color="secondary"
+              disabled={isSubmitting}
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+            >
+              Log In {'  '}
+              {isSubmitting && (
+                <CircularProgress />
+              )}
+            </Button>
+          </Box>
+        </form>
+      )}
+    </Formik>
              </div>
-             <div>
-            <ValidationTextField 
-            InputProps={{
-                className:classes.fontColor
-            }} value={title}
-                onChange={(e)=>setTitle(e.target.value)}
-                required
-             className={classes.typo}id="outlined-basic" label="Enter Post title" variant="outlined"/>
              </div>
-             </div>
-             <div className={classes.textarea}>
-            <ValidationTextField
-            InputProps={{
-                className:classes.fontColor
-            }}
-            required
-            value={body}
-            onChange={(e)=>setBody(e.target.value)}
-             className={classes.typo}
-          id="filled-multiline-static"
-          label="Post Body"
-          multiline
-          rows={4}
-          defaultValue="Post Body"
-          variant="filled"
-        />
         </div>
-        </div>
-        <div className={classes.button}>
-        <Button style={{backgroundColor:'#3f51b5' , color:'azure'}} onClick={()=>{
-            addpost(userId,title,body,props);
-        }}  className={classes.button}variant="contained">Add Post</Button>
-        </div>
+
+     
         </Paper>
         
     );
