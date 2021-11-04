@@ -140,7 +140,7 @@ function Post(props) {
         let ERROR={};
         const {userId,title,body} = values;
         if((!validator.isNumeric(userId))||validator.isAlpha(userId)){
-            ERROR['userId']="Only Numeric input is allowed!"
+            ERROR['userId']="Only Numeric input is allowed in UserId field!"
         }
         if(!validator.isLength(title,{
             min:5,
