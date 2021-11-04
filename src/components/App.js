@@ -31,22 +31,16 @@ function App(props) {
     return (
         <div  >       
             <Header/>
-            <Container>
-        <div  className={classes.container}>
-            <div className={classes.gridpost}>
-            <Grid >
+            < Grid container spacing={2}>
+            <Grid item  md ={6}>
              <Post/>
              <EditPost/>
              <DeletePost/>
             </Grid>
-            </div>
-            <div className={classes.gridview}>
-            <Grid>
+            <Grid item md ={6}>
              <ViewPost/>
             </Grid>
-            </div>
-        </div>
-        </Container>
+        </Grid>
         </div>
     );
 }

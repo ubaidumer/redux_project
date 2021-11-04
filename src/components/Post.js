@@ -188,6 +188,7 @@ function Post(props) {
           <TextField
             error={Boolean(touched.userId && errors.userId)}
             autoFocus
+            fullWidth
             helperText={touched.userId && errors.userId}
             label="UserId"
             margin="normal"
@@ -202,6 +203,7 @@ function Post(props) {
           <TextField
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
+            fullWidth
             label="Title"
             margin="normal"
             name="title"
@@ -215,6 +217,7 @@ function Post(props) {
             error={Boolean(touched.body && errors.body)}
             helperText={touched.body && errors.body}
             label="Body"
+            fullWidth
             margin="normal"
             name="body"
             onBlur={handleBlur}
